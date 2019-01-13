@@ -7,7 +7,7 @@
   "kill the minibuffer"
   (when (and (>= (recursion-depth) 1) (active-minibuffer-window))
     (abort-recursive-edit)))
-(add-hook 'mouse-leave-buffer-hook 'stop-using-minibuffer)
+;; (add-hook 'mouse-leave-buffer-hook 'stop-using-minibuffer)
 
 ;; after adding a word to the dictionary, run flyspell again, instead
 ;; of removing all the markup
@@ -57,7 +57,7 @@
 ;; Garbage Collection
 ;;
 (setq gc-cons-threshold (eval-when-compile (* 1024 1024 1024)))
-(run-with-idle-timer 2 t (lambda () (garbage-collect)))
+(run-with-idle-timer 30 t (lambda () (garbage-collect)))
 
 ;;
 ;; Backups

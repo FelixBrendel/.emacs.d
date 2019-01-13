@@ -78,9 +78,11 @@
 
 (defun flutter-run-emulator ()
   (interactive)
-  (start-process "flutter emulator" "*flutter emulator*" "emulator" "-netdelay" "none" "-netspeed" "full" "-avd" "Nexus6API28"))
+  (start-process "flutter emulator" "*flutter emulator*" "flutter" "emulators" "--launch" "flutter_emulator"))
 
 (add-hook 'after-save-hook 'flutter-after-save-hook)
+
+(require 'compile)
 
 (add-to-list 'compilation-error-regexp-alist 'dart)
 (add-to-list 'compilation-error-regexp-alist-alist

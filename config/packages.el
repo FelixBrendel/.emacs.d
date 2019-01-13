@@ -12,16 +12,17 @@
     :config
     (company-posframe-mode 1)))
 
-(use-package company :ensure t
+(use-package company
+  :ensure t
+  :diminish "(C)"
   :config
   (setq company-dabbrev-downcase nil)
-  (setq-default company-lighter-base "(C)")
+  ;; (setq-default company-lighter-base "(C)")
   (setq-default company-show-numbers          1)
   (setq-default company-idle-delay            0) ; start completion immediately
   (setq-default company-minimum-prefix-length 1) ; start completion after 1 character.
   (setq-default company-tooltip-align-annotations t)
   (global-company-mode 1))
-
 
 ;; filter companys suggestions, to not contaion numbers, or non ANSII
 ;; characters or if it is too long
@@ -99,6 +100,7 @@
 
 (use-package flycheck
   :ensure t)
+
 (use-package flycheck-popup-tip
   :ensure t)
 
@@ -171,7 +173,6 @@
   :bind (("C-s" . swiper)
          ("C-r" . swiper)))
 
-
 (use-package magit
   :ensure t)
 (setenv "GIT_ASKPASS" "git-gui--askpass")
@@ -186,7 +187,6 @@
 
 (use-package multiple-cursors
   :ensure t)
-
 
 (use-package powerline
   :ensure t
@@ -266,10 +266,10 @@
 (use-package which-key
   :ensure t
   :config
-  (setq which-key-idle-delay 0.2)
+  (setq which-key-idle-delay 0.5)
   (setq which-key-lighter "")
-  (setq which-key-mode t)
-  (setq which-key-sort-order (quote which-key-prefix-then-key-order)))
+  (setq which-key-sort-order 'which-key-prefix-then-key-order)
+  (which-key-mode t))
 
 (use-package wttrin
   :ensure t
@@ -280,4 +280,11 @@
 (require 'winner)
 (winner-mode 1)
 
-(add-hook 'prog-mode-hook #'hs-minor-mode)
+;; (add-hook 'prog-mode-hook #'hs-minor-mode)
+
+(use-package drag-stuff
+  :diminish
+  :ensure t)
+
+(drag-stuff-global-mode 1)
+;; (drag-stuff-define-keys)

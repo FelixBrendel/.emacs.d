@@ -17,14 +17,16 @@
 
 (defun color-link-face (path)
   "Face function for color links."
-  (or (cdr (assoc path org-link-colors))
-      `(:foreground ,path)))
+  ;; (message path)
+  ;; (or 1 (cdr (assoc path org-link-colors))
+  `(:underline ,nil :foreground ,path))
+  ;; )
 
 
 (defun color-link-export (path description backend)
   "Export function for color links."
   (cond
-   ((eq backend 'latex)                         ; added by TL
+   ((eq backend 'latex)                          ; added by TL
     (format "{\\color{%s}%s}" path description)) ; added by TL
    ((or (eq backend 'html) (eq backend 'md) (eq backend 'hugo))
     (let ((rgb (assoc (downcase path) color-name-rgb-alist))
@@ -38,10 +40,12 @@
 
 (with-eval-after-load 'org
   (org-link-set-parameters "color"
-                           :face 'color-link-face
+                           :face     'color-link-face
                            :complete 'color-comp
-                           :export 'color-link-export))
+                           :export   'color-link-export))
 
+(with-eval-after-load 'org-clock
+  (setq org-clock-idle-time 10))
 
 (with-eval-after-load 'compile
   (add-to-list 'compilation-error-regexp-alist 'latex-warning)

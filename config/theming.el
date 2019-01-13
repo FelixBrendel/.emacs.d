@@ -1,6 +1,10 @@
 (use-package  color-theme-sanityinc-solarized
   :ensure t
   :config (load-theme 'sanityinc-solarized-dark t))
+(set-face-foreground 'font-lock-comment-face "#46BA3C")
+;; (set-face-foreground 'font-lock-doc-face "#99a")
+(set-face-foreground 'font-lock-comment-delimiter-face "#46BA3C")
+
 
 (setq mouse-wheel-scroll-amount '(3 ((shift) . 1))) ;; one line at a time
 (setq mouse-wheel-progressive-speed nil)            ;; don't accelerate scrolling

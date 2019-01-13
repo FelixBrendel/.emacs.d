@@ -5,7 +5,7 @@
     (setq build-script-name "build.bat")
   (setq build-script-name "build.sh"))
 
-(setq doc-view-ghostscript-program "/usr/bin/gs")
+(setq doc-view-ghostscript-program "gswin64c.exe")
 
 (add-to-list 'exec-path "D:/Daten/Coding/Go/Library/bin/")
 

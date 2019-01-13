@@ -15,6 +15,8 @@
         c-indent-line-or-region
         comment-line
         comment-region
+        drag-stuff-down
+        drag-stuff-up
         duplicate-line
         forward-sexp
         ignore
@@ -28,8 +30,10 @@
         org-end-of-line
         org-force-self-insert
         org-kill-line
+        org-open-line
         org-return
         org-self-insert-command
+        org-shiftcontrolright
         org-yank
         orgtbl-self-insert-command
         rjsx-electric-gt
@@ -40,6 +44,7 @@
 
 (setq mc/cmds-to-run-once
       '(
+        backward-kill-sentence
         change-lang
         counsel-M-x
         counsel-find-file
