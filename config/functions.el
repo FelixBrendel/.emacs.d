@@ -236,7 +236,23 @@ pushd %~dp0
 build
 run
 
-popd") ("python" . "@echo off
+popd") ("java junit" . "@echo off
+pushd %~dp0
+
+rem we need `junit-4.12.jar` in the source folder
+javac -cp junit-4.12.jar -d build *.java
+
+if %errorlevel% == 0 (
+   rem we need junit-4.12.jar and hamcrest-core-1.3.jar in the build folder
+   pushd build
+   java -cp .;junit-4.12.jar;hamcrest-core-1.3.jar org.junit.runner.JUnitCore MergeSortTest
+   popd
+) else (
+   echo.
+   echo Fucki'n 'ell
+)
+popd
+") ("python" . "@echo off
 pushd %~dp0
 
 python filename.py

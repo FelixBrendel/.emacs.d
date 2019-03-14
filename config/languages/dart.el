@@ -1,5 +1,5 @@
-(require 'lawndart)
-(add-to-list 'auto-mode-alist '("\\.dart\\'" . lawndart-mode))
+;; (require 'lawndart)
+;; (add-to-list 'auto-mode-alist '("\\.dart\\'" . lawndart-mode))
 
 (setq flutter--running-p nil)
 

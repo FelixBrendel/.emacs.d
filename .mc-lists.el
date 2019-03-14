@@ -18,6 +18,7 @@
         drag-stuff-down
         drag-stuff-up
         duplicate-line
+        end-of-buffer
         forward-sexp
         ignore
         indent-for-tab-command
@@ -34,6 +35,7 @@
         org-return
         org-self-insert-command
         org-shiftcontrolright
+        org-shiftright
         org-yank
         orgtbl-self-insert-command
         rjsx-electric-gt
@@ -53,6 +55,7 @@
         find-file-other-window
         handle-switch-frame
         help-for-help
+        ivy-alt-done
         ivy-switch-buffer
         mark-word-or-next-word-like-this
         markdown-cycle

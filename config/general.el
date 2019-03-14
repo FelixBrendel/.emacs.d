@@ -16,21 +16,21 @@
 (advice-add 'ispell-pdict-save :after #'flyspell-buffer-after-pdict-save)
 
 ;; auto overwrap i-search
-(defadvice isearch-search (after isearch-no-fail activate)
-  (unless isearch-success
-    (ad-disable-advice 'isearch-search 'after 'isearch-no-fail)
-    (ad-activate 'isearch-search)
-    (isearch-repeat (if isearch-forward 'forward))
-    (ad-enable-advice 'isearch-search 'after 'isearch-no-fail)
-    (ad-activate 'isearch-search)))
+;; (defadvice isearch-search (after isearch-no-fail activate)
+;;   (unless isearch-success
+;;     (ad-disable-advice 'isearch-search 'after 'isearch-no-fail)
+;;     (ad-activate 'isearch-search)
+;;     (isearch-repeat (if isearch-forward 'forward))
+;;     (ad-enable-advice 'isearch-search 'after 'isearch-no-fail)
+;;     (ad-activate 'isearch-search)))
 
 ;; Prevents issue where you have to press backspace twice when trying
 ;; to remove the first character that fails a search
-(define-key isearch-mode-map [remap isearch-delete-char] 'isearch-del-char)
+;; (define-key isearch-mode-map [remap isearch-delete-char] 'isearch-del-char)
 
 ;; some performance improvements
 ;; https://github.com/sabof/org-bullets/issues/11#issuecomment-439228372
-(setq inhibit-compacting-font-caches t)
+;; (setq inhibit-compacting-font-caches t)
 
 ;; the Minibuffer should inherit the active input method.
 ;; https://emacs.stackexchange.com/questions/38310/how-to-make-minibuffer-always-use-the-input-method-of-the-main-buffer
@@ -44,20 +44,20 @@
 (add-hook 'minibuffer-setup-hook #'my-inherit-input-method)
 
 ;; search for highlighted if exist
-(defun jrh-isearch-with-region ()
-  "Use region as the isearch text."
-  (when mark-active
-    (let ((region (funcall region-extract-function nil)))
-      (deactivate-mark)
-      (isearch-push-state)
-      (isearch-yank-string region))))
-(add-hook 'isearch-mode-hook #'jrh-isearch-with-region)
-
+;; (defun jrh-isearch-with-region ()
+;;   "Use region as the isearch text."
+;;   (when mark-active
+;;     (let ((region (funcall region-extract-function nil)))
+;;       (deactivate-mark)
+;;       (isearch-push-state)
+;;       (isearch-yank-string region))))
+;; (add-hook 'isearch-mode-hook #'jrh-isearch-with-region)
 ;;
 ;; Garbage Collection
 ;;
-(setq gc-cons-threshold (eval-when-compile (* 1024 1024 1024)))
-(run-with-idle-timer 30 t (lambda () (garbage-collect)))
+
+;; (setq gc-cons-threshold (eval-when-compile (* 1024 1024 1024)))
+;; (run-with-idle-timer 30 t (lambda () (garbage-collect)))
 
 ;;
 ;; Backups
@@ -78,11 +78,10 @@
 (setq compilation-srscroll-output t)
 (require 'ansi-color)
 (defun colorize-compilation-buffer ()
-  (toggle-read-only)
+  (read-only-mode 1)
   (ansi-color-apply-on-region compilation-filter-start (point))
-  (toggle-read-only))
+  (read-only-mode 1))
 (add-hook 'compilation-filter-hook 'colorize-compilation-buffer)
-
 
 ;; (defadvice yank (around html-yank-indent)
 ;;   "Indents after yanking."
