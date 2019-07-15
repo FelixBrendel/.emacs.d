@@ -2,6 +2,33 @@
   :ensure t
   :config (load-theme 'sanityinc-solarized-dark t))
 
+
+(setq inhibit-compacting-font-caches t)
+
+(defun +doom-maybe-icon-octicon (&rest args)
+  (when (and (display-graphic-p) (not (eq system-type 'windows-nt)))
+    (apply 'all-the-icons-octicon args)))
+
+(defun +doom-maybe-icon-faicon (&rest args)
+  (when (and (display-graphic-p) (not (eq system-type 'windows-nt)))
+    (apply 'all-the-icons-faicon args)))
+
+(defun +doom-maybe-icon-material (&rest args)
+  (when (and (display-graphic-p) (not (eq system-type 'windows-nt)))
+    (apply 'all-the-icons-material args)))
+
+
+(use-package doom-modeline
+  :ensure t
+  :config
+  (setq doom-modeline-icon t
+        doom-modeline-major-mode-icon t
+        doom-modeline-buffer-state-icon t
+        doom-modeline-minor-modes t)
+  :hook (after-init . doom-modeline-mode))
+
+(set-fontset-font t nil (font-spec :size 20 :name "Symbola"))
+
 (set-face-foreground 'font-lock-comment-face "#46BA3C")
 ;; (set-face-foreground 'font-lock-doc-face "#99a")
 (set-face-foreground 'font-lock-comment-delimiter-face "#46BA3C")

@@ -1,10 +1,51 @@
-;;;###autoload
+(require 'cl-lib)
+(require 'company)
+
+
+(defconst slime-built-ins
+  '("=" ">" ">=" "<" "<=" "+" "-" "*" "/" "**" "%"
+    "assert" "define" "define-syntax" "mutate" "if"
+    "quote" "quasiquote" "unquote" "unquote-splicing" "and" "or" "not" "while" "let"
+    "lambda" "special-lambda" "eval" "begin" "list" "pair"
+    "first" "rest" "set-type" "delete-type" "type" "info"
+    "show" "addr-of" "generate-docs" "print" "read" "exit" "break" "memstat" "try"
+    "load" "import" "copy" "error" "symbol->keyword" "string->symbol"
+    "symbol->string" "concat-strings"))
+
+
+(defun my-slime-eldoc-function ()
+  (let ((symbol (symbol-name (car (read (thing-at-point 'sexp))))))
+    (if (member symbol slime-built-ins)
+        (sample-meta symbol)
+      (concat symbol " ?"))))
+
+(defun sample-meta (s)
+  (cond
+   ((string= s "=")   "(= :rest <objects>)")
+   ((string= s ">")   "(> :rest <numbers>)")
+   ((string= s ">=") "(>= :rest <numbers>)")
+   ((string= s "<")   "(< :rest <numbers>)")
+   ((string= s "<=") "(<= :rest <numbers>)")
+   ((string= s "+")   "(+ :rest <numbers>)")
+   ((string= s "-")   "(- :rest <numbers>)")
+   ((string= s "*")   "(* :rest <numbers>)")
+   ((string= s "/")   "(/ :rest <numbers>)")
+   ((string= s "**") "(** <number> <exponent>)")
+   ((string= s "assert") "(assert <condition>)")
+   ((string= s "define") "(define <name-or-lambda-list> [doc-string] <expression-or-bodx>)")
+   ((string= s "define-syntax") "(define-syntax <name-and-lambda-list> [doc-string] <bodx>)")
+   ((string= s "mutate")  "(mutate <expression> <expression>)")
+   ((string= s "if") "(if <test> <consequence> <alternative>)")
+   (t "")))
+
+
 (add-to-list 'auto-mode-alist '("\\.slime\\'" . slime-mode))
 
+(put 'lambda 'doc-string-elt 2)
+(put 'special-lambda 'doc-string-elt 2)
 (put 'define 'doc-string-elt 2)
-(put 'define-syntax 'doc-string-elt 3)
+(put 'define-syntax 'doc-string-elt 2)
 
-;;;###autoload
 (define-derived-mode slime-mode prog-mode "(slime)"
   "Major mode for editing slime code."
   :group 'lisp
@@ -37,22 +78,14 @@
 
   (defconst yess
     (append
-     `((,(concat "\\_<"
-                 (regexp-opt
-                  '("=" ">" ">=" "<" "<=" "+" "-" "*" "/" "**"
-                    "assert" "define" "define-syntax" "mutate" "if"
-                    "quote" "quasiquote" "and" "or" "not" "while" "let"
-                    "lambda" "special-lambda" "eval" "prog" "list" "pair"
-                    "first" "rest" "set-type" "delete-type" "type" "info"
-                    "show" "print" "read" "exit" "break" "memstat" "try"
-                    "load" "copy" "error" "symbol->keyword" "string->symbol"
-                    "symbol->string" "concat-strings"
-                    )) "\\_>")
-        (0 font-lock-keyword-face)))
      `((,(concat "\\(define\\)\\s-*(\\(\\_<[^ )]*\\)")
         (1 font-lock-keyword-face)
         (2 font-lock-function-name-face)
         ))
+     `((,(concat "(\\s-*\\_<"
+                 (regexp-opt
+                  slime-built-ins) "\\_>")
+        (0 font-lock-keyword-face)))
      `((,(concat "[`‘]\\(\\(?:\\sw\\|\\s_\\|\\\\.\\)"
                  lisp-mode-symbol-regexp "\\)['’]")
         (1 font-lock-constant-face prepend))
@@ -82,9 +115,6 @@
   (setq-local electric-pair-skip-whitespace 'chomp)
   (setq-local electric-pair-open-newline-between-pairs nil)
 
-
-
-
   (add-hook 'after-load-functions #'elisp--font-lock-flush-elisp-buffers)
   (unless noninteractive
     (require 'elec-pair)
@@ -100,5 +130,33 @@
   (add-hook 'completion-at-point-functions #'elisp-completion-at-point nil 'local)
   (add-hook 'flymake-diagnostic-functions  #'elisp-flymake-checkdoc nil t)
   (add-hook 'flymake-diagnostic-functions  #'elisp-flymake-byte-compile nil t))
+
+
+(defun company-simple-backend (command &optional arg &rest ignored)
+  (interactive (list 'interactive))
+  (cl-case command
+    (interactive (company-begin-backend 'company-simple-backend))
+    (prefix (when (looking-back "foo\\>")
+              (match-string 0)))
+    (candidates (when (equal arg "foo")
+                  (list "foobar" "foobaz" "foobarbaz")))
+    (meta (format "This value is named %s" arg))))
+
+(defun company-sample-backend (command &optional arg &rest ignored)
+  (interactive (list 'interactive))
+  (cl-case command
+    (interactive (company-begin-backend 'company-sample-backend))
+    (prefix (and (eq major-mode 'slime-mode)
+                 (company-grab-symbol)))
+    (candidates
+     (remove-if-not
+      (lambda (c) (string-prefix-p arg c))
+      slime-built-ins))
+    (meta (sample-meta arg))))
+
+(add-hook 'slime-mode-hook
+          (lambda ()
+            ;; (set (make-local-variable 'eldoc-documentation-function) 'my-slime-eldoc-function)
+            (set (make-local-variable 'company-backends) '(company-sample-backend))))
 
 (provide 'slime-mode)

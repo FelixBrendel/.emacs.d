@@ -175,7 +175,8 @@
   :defer t
   :ensure t
   :diminish
-  :bind (("M-x" . counsel-M-x)))
+  :bind (("M-x" . counsel-M-x)
+         ("M-S-s" . counsel-rg)))
 
 (use-package ivy-rich
   :after ivy
@@ -234,8 +235,9 @@
   :bind ("C-c T" . projectile-find-todos)
   :init
   (progn
-    (setq projectile-keymap-prefix (kbd "C-c p"))
-    (define-key projectile-mode-map (kbd "C-c p") 'projectile-command-map))
+    (setq projectile-keymap-prefix (kbd "C-c p"))    
+    ;; (define-key projectile-mode-map (kbd "C-c p") 'projectile-command-map)
+    )
   :config
   (projectile-mode))
 

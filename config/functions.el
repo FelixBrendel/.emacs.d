@@ -191,7 +191,7 @@
         (mc/maybe-multiple-cursors-mode)
         (mc/cycle-forward))
     ;; else
-    (mc--select-thing-at-point 'word)))
+    (mc--select-thing-at-point 'symbol)))
 
 
 (defun insert-build-script()
