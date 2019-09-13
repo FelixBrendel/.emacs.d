@@ -72,6 +72,26 @@
 ;;
 ;; Compilation
 ;;
+
+(with-eval-after-load 'compile
+  (add-to-list 'compilation-error-regexp-alist-alist
+	       '(clang-anonymous
+		 "^.* at \\(\\([^\n:/]+/\\)+[^\n:/]+\\):\\([0-9]+\\):\\([0-9]+\\)"
+		 1 3 4))
+  (add-to-list 'compilation-error-regexp-alist 'clang-anonymous)
+
+  (add-to-list 'compilation-error-regexp-alist-alist
+	       '(clang-error
+		 ;; ../src/./io.cpp(368,18): error:
+		 "\\(\\([^\n:]+\\)(\\([0-9]+\\),\\([0-9]+\\)): error:\\)" 2 3 4))
+  (add-to-list 'compilation-error-regexp-alist 'clang-error)
+
+  (add-to-list 'compilation-error-regexp-alist-alist
+	       '(clang-warning
+		 ;; ../src/./io.cpp(368,18): error:
+		 "\\(\\([^\n:]+\\)(\\([0-9]+\\),\\([0-9]+\\)): warning\\)" 2 3 4))
+  (add-to-list 'compilation-error-regexp-alist 'clang-warning))
+
 (setq compilation-ask-about-save nil)
 (setq compilation-auto-jump-to-first-error nil)
 (setq compilation-read-command nil)

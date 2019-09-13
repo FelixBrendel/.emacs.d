@@ -2,37 +2,20 @@
   :ensure t
   :config (load-theme 'sanityinc-solarized-dark t))
 
-
-(setq inhibit-compacting-font-caches t)
-
-(defun +doom-maybe-icon-octicon (&rest args)
-  (when (and (display-graphic-p) (not (eq system-type 'windows-nt)))
-    (apply 'all-the-icons-octicon args)))
-
-(defun +doom-maybe-icon-faicon (&rest args)
-  (when (and (display-graphic-p) (not (eq system-type 'windows-nt)))
-    (apply 'all-the-icons-faicon args)))
-
-(defun +doom-maybe-icon-material (&rest args)
-  (when (and (display-graphic-p) (not (eq system-type 'windows-nt)))
-    (apply 'all-the-icons-material args)))
-
-
 (use-package doom-modeline
   :ensure t
   :config
   (setq doom-modeline-icon t
         doom-modeline-major-mode-icon t
         doom-modeline-buffer-state-icon t
-        doom-modeline-minor-modes t)
+        doom-modeline-buffer-modification-icon t
+        doom-modeline-minor-modes t
+        doom-modeline-major-mode-color-icon t
+        )
   :hook (after-init . doom-modeline-mode))
 
-(set-fontset-font t nil (font-spec :size 20 :name "Symbola"))
-
 (set-face-foreground 'font-lock-comment-face "#46BA3C")
-;; (set-face-foreground 'font-lock-doc-face "#99a")
 (set-face-foreground 'font-lock-comment-delimiter-face "#46BA3C")
-
 
 (setq mouse-wheel-scroll-amount '(3 ((shift) . 1))) ;; one line at a time
 (setq mouse-wheel-progressive-speed nil)            ;; don't accelerate scrolling
@@ -49,7 +32,8 @@ Love's a game
 They all say it, they mean it
 Might as well have fun
 Play every single one")
-                                        ; (add-to-list 'default-frame-alist '(fullscreen . maximized))
+
+;; (add-to-list 'default-frame-alist '(fullscreen . maximized))
 (setq frame-title-format "%b - Emacs ")
 (setq inhibit-startup-screen t)
 (scroll-bar-mode -1)
@@ -58,7 +42,7 @@ Play every single one")
 (tooltip-mode -1)
 (show-paren-mode t)
 
-(setq window-divider-default-places (quote right-only))
+(setq window-divider-default-places 'right-only)
 (setq window-divider-default-right-width 3)
 (window-divider-mode t)
 
@@ -76,8 +60,7 @@ Play every single one")
     (when (>= blink-cursor-count (length blink-cursor-colors))
       (setq blink-cursor-count 0))
     (set-cursor-color (nth blink-cursor-count blink-cursor-colors))
-    (setq blink-cursor-count (+ 1 blink-cursor-count))
-    )
+    (setq blink-cursor-count (+ 1 blink-cursor-count)))
   (internal-show-cursor nil (not (internal-show-cursor-p))))
 
 (blink-cursor-mode)

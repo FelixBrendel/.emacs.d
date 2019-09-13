@@ -82,6 +82,10 @@
         (1 font-lock-keyword-face)
         (2 font-lock-function-name-face)
         ))
+     `((,(concat "\\(define-syntax\\)\\s-*(\\(\\_<[^ )]*\\)")
+        (1 font-lock-keyword-face)
+        (2 font-lock-function-name-face)
+        ))
      `((,(concat "(\\s-*\\_<"
                  (regexp-opt
                   slime-built-ins) "\\_>")
@@ -160,3 +164,7 @@
             (set (make-local-variable 'company-backends) '(company-sample-backend))))
 
 (provide 'slime-mode)
+
+(with-eval-after-load 'all-the-icons
+  (setq all-the-icons-icon-alist       (cons '("\\.slime$"  all-the-icons-fileicon "lisp"  :height 1.2 :face all-the-icons-blue) all-the-icons-icon-alist))
+  (setq all-the-icons-mode-icon-alist  (cons '(slime-mode  all-the-icons-fileicon "lisp"  :height 1.2 :face all-the-icons-blue) all-the-icons-mode-icon-alist)))

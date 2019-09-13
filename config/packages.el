@@ -21,7 +21,6 @@
   :diminish "(C)"
   :config
   (setq company-dabbrev-downcase nil)
-  ;; (setq-default company-lighter-base "(C)")
   (setq-default company-show-numbers          1)
   (setq-default company-idle-delay            0.1) ; start completion immediately
   (setq-default company-minimum-prefix-length 1) ; start completion after 1 character.
@@ -56,10 +55,16 @@
    rainbow-delimiters-depth-7-face '(:foreground "spring green")
    rainbow-delimiters-depth-8-face '(:foreground "sienna1")))
 
-
 (use-package hydra
   :defer t
-  :ensure t)
+  :ensure t
+  :config
+  (setq hydra-hint-display-type 'posframe)
+  (setq hydra-posframe-show-params
+        '(:internal-border-width 1
+          :internal-border-color "gray50"
+          :poshandler posframe-poshandler-frame-center))
+  )
 
 (use-package browse-kill-ring
   :defer t
@@ -218,31 +223,15 @@
          ("C-<mouse-1>" . 'mc/add-cursor-on-click))
   :config (define-key mc/keymap (kbd "<return>") nil))
 
-(use-package powerline
-  :ensure t
-  :config
-   (setq powerline-default-separator (quote wave))
-   (setq powerline-display-hud t)
-   (setq powerline-gui-use-vcs-glyph nil)
-   (setq powerline-height 25)
-   (setq powerline-text-scale-factor nil)
-   (powerline-default-theme))
-
 (use-package projectile
   :ensure t
   :defer nil
   :diminish
   :bind ("C-c T" . projectile-find-todos)
-  :init
-  (progn
-    (setq projectile-keymap-prefix (kbd "C-c p"))    
-    ;; (define-key projectile-mode-map (kbd "C-c p") 'projectile-command-map)
-    )
   :config
-  (projectile-mode))
-
-
-
+  (projectile-mode)
+    ;; (setq projectile-keymap-prefix (kbd "C-c p"))
+    (define-key projectile-mode-map (kbd "C-c p") 'projectile-command-map))
 
 (use-package projectile-ripgrep
   :ensure t
@@ -336,3 +325,22 @@
     (define-key org-mode-map (kbd "<M-down>")
       (lambda () (interactive)
         (call-interactively (if (org-at-heading-p) 'org-metadown 'drag-stuff-down))))))
+
+(use-package ivy-posframe
+  :ensure t
+  :diminish
+  :config
+  (setq ivy-posframe-display-functions-alist '((t . ivy-posframe-display-at-frame-center)))
+  (setq ivy-posframe-parameters
+        '((left-fringe . 8)
+          (right-fringe . 8)
+          (top-fringe . 8)))
+  (set-face-attribute 'internal-border nil :background "gray50")
+  (setq ivy-posframe-border-width 1)
+  ;; (ivy-posframe-enable)
+  (ivy-posframe-mode 1))
+
+(use-package pdf-tools
+  :ensure t
+  :config
+  (pdf-tools-install :no-query))
