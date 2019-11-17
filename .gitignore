@@ -1,6 +1,7 @@
 /.cache
 /auto-save-list
 /elpa
+/eshell
 /server
 emacs-init.el
 ido.last
