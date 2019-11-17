@@ -60,12 +60,19 @@
 (defun save-and-find-build-script-and-compile ()
   "Walks upward the directory tree until a buildscript is found"
   (interactive)
+
   (when (and buffer-file-name (buffer-modified-p)) (save-buffer))
   (let* ((build-script-path (locate-dominating-file (expand-file-name default-directory) build-script-name)))
-    (if build-script-path (progn
-                            (setq compile-command (concat build-script-path build-script-name))
-                            (compile compile-command))
-      (error (concat "The default buildscript '" build-script-name "' cannot be found")))))
+    (unless build-script-path
+      (error (concat "The default buildscript '" build-script-name "' cannot be found")))
+    ;; NOTE(Felix): because we will set compilation to comint mode,
+    ;; after the compilation process finishes, we will set it back to
+    ;; normal compilation mode, so that we can press g for recompile or
+    ;; q for closing the window. As opposoed to typing in these chars as
+    ;; we would if we would not switch off the comint mode.
+    (setq compilation-finish-functions
+          (list (lambda (&rest x) (compilation-minor-mode 1))))
+    (compile (concat build-script-path build-script-name) t)))
 
 (defun move-lines (n)
   (let ((beg) (end) (keep))
